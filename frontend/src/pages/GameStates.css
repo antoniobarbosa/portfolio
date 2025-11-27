@@ -1,0 +1,236 @@
+.GameStates-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.GameStates-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.GameStates-controls input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 80px;
+}
+
+.GameStates-controls button {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.GameStates-controls button:hover {
+  background: #0056b3;
+}
+
+.GameStates-stats {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #e9ecef;
+  border-radius: 8px;
+}
+
+.GameStates-stats p {
+  margin: 4px 0;
+}
+
+.GameStates-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.GameStates-list {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.GameStates-list h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.GameStates-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.GameStates-session {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.GameStates-session:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.GameStates-session.active {
+  border-color: #28a745;
+  background: #f0fff4;
+}
+
+.GameStates-session.current {
+  border-color: #ffc107;
+  background: #fffbf0;
+}
+
+.GameStates-session-header {
+  margin-bottom: 8px;
+}
+
+.GameStates-session-id {
+  font-family: monospace;
+  font-size: 12px;
+  color: #666;
+  font-weight: bold;
+}
+
+.GameStates-session-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.GameStates-session-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.GameStates-session-info strong {
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.GameStates-detail {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.GameStates-detail h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.GameStates-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #ddd;
+}
+
+.GameStates-detail-header h3 {
+  margin: 0;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.GameStates-detail-header button {
+  padding: 6px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.GameStates-detail-header button:hover {
+  background: #c82333;
+}
+
+.GameStates-detail-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.GameStates-detail-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.GameStates-detail-info strong {
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.GameStates-detail-gamestate {
+  margin-top: 20px;
+}
+
+.GameStates-detail-gamestate h4 {
+  margin-bottom: 12px;
+}
+
+.GameStates-json {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling */
+.GameStates-list::-webkit-scrollbar,
+.GameStates-detail::-webkit-scrollbar,
+.GameStates-json::-webkit-scrollbar {
+  width: 8px;
+}
+
+.GameStates-list::-webkit-scrollbar-track,
+.GameStates-detail::-webkit-scrollbar-track,
+.GameStates-json::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.GameStates-list::-webkit-scrollbar-thumb,
+.GameStates-detail::-webkit-scrollbar-thumb,
+.GameStates-json::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.GameStates-list::-webkit-scrollbar-thumb:hover,
+.GameStates-detail::-webkit-scrollbar-thumb:hover,
+.GameStates-json::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

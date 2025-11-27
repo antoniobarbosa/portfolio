@@ -1,0 +1,27 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.App-footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+.App-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+

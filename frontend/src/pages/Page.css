@@ -1,0 +1,94 @@
+.Page {
+  width: 100%;
+}
+
+.Page-hero {
+  text-align: center;
+  padding: 3rem 0;
+  margin-bottom: 3rem;
+}
+
+.Page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.Page-subtitle {
+  font-size: 1.3rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.Page-content {
+  line-height: 1.8;
+  color: #444;
+}
+
+.Page-content h2 {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.Page-content h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.Page-content p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.Page-content ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.Page-content li {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.Contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.Contact-item {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.Contact-item h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.Contact-item p {
+  margin-bottom: 0;
+  color: #666;
+}
+
+.Help-section {
+  margin-bottom: 2.5rem;
+}
+
+.Help-faq h3 {
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+.Help-faq p {
+  margin-left: 1rem;
+  color: #666;
+}
+
