@@ -1,10 +1,24 @@
-import React, { useState } from "react";
-import { eventBus } from "../core";
+import React, { useState, useEffect } from "react";
+import { eventBus, achievementManager } from "../core";
 import "./GameStartOverlay.css";
 
 function GameStartOverlay() {
   const [isRevealing, setIsRevealing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [hasGameStartAchievement, setHasGameStartAchievement] = useState(false);
+
+  // Verifica se já tem o achievement "game_start"
+  useEffect(() => {
+    const checkAchievement = () => {
+      const hasAchievement = achievementManager.hasAchievement("game_start");
+      setHasGameStartAchievement(hasAchievement);
+      if (hasAchievement) {
+        setIsVisible(false);
+      }
+    };
+
+    checkAchievement();
+  }, []);
 
   const handleClick = (e) => {
     // Previne múltiplas execuções
@@ -20,7 +34,7 @@ function GameStartOverlay() {
       x: e.clientX,
       y: e.clientY,
     });
-
+    // Achievement será adicionado automaticamente quando o evento for processado
     // Inicia a animação de revelação
     setIsRevealing(true);
 

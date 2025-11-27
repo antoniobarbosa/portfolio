@@ -8,7 +8,13 @@ import {
 } from "react-router-dom";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { getTranslation } from "./translations";
-import { eventBus, stanley, eventLogger, gameLoop } from "./core";
+import {
+  eventBus,
+  stanley,
+  eventLogger,
+  gameLoop,
+  achievementManager,
+} from "./core";
 import Navigation from "./components/Navigation";
 import GameStateDebug from "./components/GameStateDebug";
 import Home from "./pages/Home";
@@ -50,6 +56,15 @@ function AppContentInner() {
     // Configura o GameLoop
     gameLoop.setGameStateGetter(() => gameStateRef.current);
     gameLoop.setGameStateUpdater((updates) => {
+      setGameState((prev) => {
+        if (!prev) return prev;
+        return { ...prev, ...updates };
+      });
+    });
+
+    // Configura o AchievementManager
+    achievementManager.setGameStateGetter(() => gameStateRef.current);
+    achievementManager.setGameStateUpdater((updates) => {
       setGameState((prev) => {
         if (!prev) return prev;
         return { ...prev, ...updates };
@@ -167,6 +182,11 @@ function AppContentInner() {
         currentPage: path,
         lastAction: "NAVIGATE",
       });
+
+      // Adiciona achievement cumulativo baseado na página navegada
+      if (path === "/about") {
+        achievementManager.addCumulativeAchievement("about", 4);
+      }
     };
 
     // Listener para cliques
@@ -180,6 +200,9 @@ function AppContentInner() {
 
     // Listener para GAME_START
     const handleGameStart = (event) => {
+      // Adiciona o achievement "game_start"
+      achievementManager.addAchievement("game_start");
+
       updateGameState({
         gameStarted: true,
         startDate: Date.now(),

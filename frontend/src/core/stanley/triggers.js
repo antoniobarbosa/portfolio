@@ -13,28 +13,38 @@ const AUDIO_BASE = "/audio/stanleys_parable";
  * Registra todos os triggers do Stanley
  */
 export function registerStanleyTriggers() {
-  // Trigger: Game Start → Toca áudio e inicia o jogo
+  // Trigger: Game Start → Toca áudio quando achievement "game_start" é conquistado
   triggerEngine.register({
     id: "stanley_game_start",
-    listenTo: ["GAME_START"],
+    listenTo: ["game_start"], // Agora escuta o achievement, não o evento
     once: true,
     priority: 20,
     conditions: (ctx) => {
-      // Sempre executa quando GAME_START é emitido
+      // Sempre executa quando achievement "game_start" é adicionado
       return true;
     },
     actions: (ctx) => {
-      console.log("veio aqui???");
+      // Toca áudio (interrupção do Stanley)
+      audioPlayer.play(`${AUDIO_BASE}/audio_test.wav`, {
+        volume: 0.7,
+      });
+    },
+  });
+
+  triggerEngine.register({
+    id: "stanley_about_1",
+    listenTo: ["about_1"], // Agora escuta o achievement, não o evento
+    once: true,
+    priority: 20,
+    conditions: (ctx) => {
+      // Sempre executa quando achievement "game_start" é adicionado
+      return true;
+    },
+    actions: (ctx) => {
       // Toca áudio
       audioPlayer.play(`${AUDIO_BASE}/audio_test.wav`, {
         volume: 0.7,
       });
-
-      // Atualiza estado do jogo
-      if (ctx.gameState) {
-        ctx.gameState.gameStarted = true;
-        ctx.gameState.startDate = Date.now();
-      }
 
       // Emite evento de que o jogo começou
       eventBus.emit("GAME_STARTED");
