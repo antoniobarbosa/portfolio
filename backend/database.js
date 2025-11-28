@@ -78,6 +78,26 @@ try {
   }
 }
 
+// Migração: adiciona coluna client_ip se não existir
+try {
+  db.exec(`ALTER TABLE events ADD COLUMN client_ip TEXT`);
+} catch (error) {
+  // Coluna já existe, ignora o erro
+  if (!error.message.includes('duplicate column name')) {
+    console.warn('Erro ao adicionar coluna client_ip:', error.message);
+  }
+}
+
+// Migração: adiciona coluna client_ip na tabela sessions se não existir
+try {
+  db.exec(`ALTER TABLE sessions ADD COLUMN client_ip TEXT`);
+} catch (error) {
+  // Coluna já existe, ignora o erro
+  if (!error.message.includes('duplicate column name')) {
+    console.warn('Erro ao adicionar coluna client_ip em sessions:', error.message);
+  }
+}
+
 // Cria índices para melhor performance
 db.exec(`
   CREATE INDEX IF NOT EXISTS idx_event_name ON events(event_name);
@@ -89,17 +109,17 @@ db.exec(`
 /**
  * Cria uma nova sessão
  */
-export function createSession(sessionId = null, gameState = null) {
+export function createSession(sessionId = null, gameState = null, clientIp = null) {
   const id = sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const startTime = Date.now();
   const gameStateStr = gameState ? JSON.stringify(gameState) : null;
   
   const stmt = db.prepare(`
-    INSERT INTO sessions (session_id, start_time, game_state)
-    VALUES (?, ?, ?)
+    INSERT INTO sessions (session_id, start_time, game_state, client_ip)
+    VALUES (?, ?, ?, ?)
   `);
   
-  stmt.run(id, startTime, gameStateStr);
+  stmt.run(id, startTime, gameStateStr, clientIp);
   return id;
 }
 
@@ -142,6 +162,7 @@ export function getSessionById(sessionId) {
     endTime: row.end_time,
     gameState: row.game_state ? JSON.parse(row.game_state) : null,
     createdAt: row.created_at,
+    clientIp: row.client_ip || null,
   } : null;
 }
 
@@ -192,13 +213,14 @@ export function getAllSessions(limit = 100) {
     endTime: row.end_time,
     gameState: row.game_state ? JSON.parse(row.game_state) : null,
     createdAt: row.created_at,
+    clientIp: row.client_ip || null,
   }));
 }
 
 /**
  * Insere um evento no banco (associado a uma sessão se houver)
  */
-export function insertEvent(eventName, payload = null, timestamp = null, sessionId = null) {
+export function insertEvent(eventName, payload = null, timestamp = null, sessionId = null, clientIp = null) {
   // Se não tem sessionId, tenta pegar a sessão ativa
   let activeSessionId = sessionId;
   if (!activeSessionId) {
@@ -207,14 +229,14 @@ export function insertEvent(eventName, payload = null, timestamp = null, session
   }
   
   const stmt = db.prepare(`
-    INSERT INTO events (session_id, event_name, payload, timestamp)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO events (session_id, event_name, payload, timestamp, client_ip)
+    VALUES (?, ?, ?, ?, ?)
   `);
   
   const ts = timestamp || Date.now();
   const payloadStr = payload ? JSON.stringify(payload) : null;
   
-  const result = stmt.run(activeSessionId, eventName, payloadStr, ts);
+  const result = stmt.run(activeSessionId, eventName, payloadStr, ts, clientIp);
   return result.lastInsertRowid;
 }
 
@@ -263,6 +285,7 @@ export function getEvents(filters = {}) {
     payload: row.payload ? JSON.parse(row.payload) : null,
     ts: row.timestamp,
     createdAt: row.created_at,
+    clientIp: row.client_ip || null,
   }));
 }
 

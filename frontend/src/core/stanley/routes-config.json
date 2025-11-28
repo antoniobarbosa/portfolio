@@ -37,7 +37,46 @@
       },
       "once": true,
       "priority": 20
+    },
+    {
+      "achievementBase": "wait_about",
+      "maxAchievements": 3,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.6
+      },
+      "once": true,
+      "priority": 20
+    },
+    {
+      "achievementBase": "linkedin",
+      "maxAchievements": 10,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.5
+      },
+      "once": true,
+      "priority": 20
+    },
+    {
+      "achievementBase": "github",
+      "maxAchievements": 10,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.5
+      },
+      "once": true,
+      "priority": 20
+    },
+    {
+      "achievementBase": "email",
+      "maxAchievements": 10,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.5
+      },
+      "once": true,
+      "priority": 20
     }
   ]
 }
-

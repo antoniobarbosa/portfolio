@@ -116,6 +116,53 @@
   word-break: break-all;
 }
 
+.GameStateDebug-audio {
+  background: #2d2d2d;
+  border-radius: 4px;
+  border: 1px solid #444;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.GameStateDebug-audio-header {
+  margin-bottom: 6px;
+}
+
+.GameStateDebug-audio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.GameStateDebug-audio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+}
+
+.GameStateDebug-audio-label {
+  color: #4ec9b0;
+  font-weight: bold;
+}
+
+.GameStateDebug-audio-label.warning {
+  color: #ffa500;
+}
+
+.GameStateDebug-audio-value {
+  color: #d4d4d4;
+  font-family: "Courier New", monospace;
+}
+
+.GameStateDebug-audio-value.success {
+  color: #4ec9b0;
+}
+
+.GameStateDebug-audio-value.warning {
+  color: #ffa500;
+}
+
 .GameStateDebug-json {
   margin: 0;
   color: #d4d4d4;

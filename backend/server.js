@@ -32,6 +32,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Helper para obter IP do cliente
+function getClientIp(req) {
+  return (
+    req.headers["x-forwarded-for"]?.split(",")[0] ||
+    req.headers["x-real-ip"] ||
+    req.connection?.remoteAddress ||
+    req.socket?.remoteAddress ||
+    req.ip ||
+    "unknown"
+  );
+}
+
 // Servir frontend em produção (apenas se o diretório existir)
 const frontendPath = join(__dirname, "../frontend/build");
 let frontendBuildExists = false;
@@ -121,7 +133,7 @@ async function saveGameState(state, sessionId = null) {
 }
 
 // Adicionar evento ao banco SQLite e validar gamePlayTime
-async function addEvent(event) {
+async function addEvent(event, clientIp = null) {
   try {
     const eventName = event.event || event.name;
     const payload = event.payload || null;
@@ -139,10 +151,16 @@ async function addEvent(event) {
         startDate: timestamp,
         achievements: [],
       };
-      const newSessionId = createSession(null, newGameState);
+      const newSessionId = createSession(null, newGameState, clientIp);
       // Cria o primeiro GameState
       insertGameState(newSessionId, newGameState);
-      const id = insertEvent(eventName, payload, timestamp, newSessionId);
+      const id = insertEvent(
+        eventName,
+        payload,
+        timestamp,
+        newSessionId,
+        clientIp
+      );
       return {
         success: true,
         id,
@@ -169,7 +187,13 @@ async function addEvent(event) {
 
     if (greaterGameState) {
       // Existe um GameState com playtime maior - retorna erro
-      const id = insertEvent(eventName, payload, timestamp, sessionId);
+      const id = insertEvent(
+        eventName,
+        payload,
+        timestamp,
+        sessionId,
+        clientIp
+      );
       throw {
         status: 409,
         message: "Conflito: existe um GameState com gamePlayTime maior",
@@ -200,7 +224,7 @@ async function addEvent(event) {
     // Salva o novo GameState
     insertGameState(sessionId, updatedGameState);
 
-    const id = insertEvent(eventName, payload, timestamp, sessionId);
+    const id = insertEvent(eventName, payload, timestamp, sessionId, clientIp);
     return {
       success: true,
       id,
@@ -278,6 +302,21 @@ app.get("/api/sessions/active", async (req, res) => {
   try {
     const activeSession = getActiveSession();
     res.json({ activeSession });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/sessions/:sessionId - Obter uma sessão específica
+app.get("/api/sessions/:sessionId", async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const session = getSessionById(sessionId);
+    if (session) {
+      res.json({ session });
+    } else {
+      res.status(404).json({ error: "Sessão não encontrada" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -366,7 +405,8 @@ app.get("/api/events/stats", async (req, res) => {
 app.post("/api/events", async (req, res) => {
   try {
     const event = req.body;
-    const result = await addEvent(event);
+    const clientIp = getClientIp(req);
+    const result = await addEvent(event, clientIp);
     // Retorna apenas success se tudo OK
     res.json(result);
   } catch (error) {

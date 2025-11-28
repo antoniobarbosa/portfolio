@@ -1,3 +1,5 @@
+import eventBus from "./EventBus";
+
 /**
  * AudioPlayer - Singleton para gerenciar um único canal de áudio
  * Garante que apenas um áudio toque por vez
@@ -10,6 +12,9 @@ class AudioPlayer {
     this.audioCache = new Map();
     this.pendingRequest = null; // Armazena a última requisição pendente
     this.isProcessing = false; // Flag para bloquear múltiplas execuções simultâneas
+    this.lastPlayAttempt = null; // Timestamp da última tentativa de tocar
+    this.lastPlaySuccess = null; // Timestamp da última reprodução bem-sucedida
+    this.playAttempts = 0; // Contador de tentativas de reprodução
   }
 
   /**
@@ -35,6 +40,44 @@ class AudioPlayer {
   }
 
   /**
+   * Verifica se o AudioContext está disponível e ativo
+   * @returns {boolean} true se o contexto está pronto para tocar
+   */
+  isContextReady() {
+    return (
+      this.audioContext !== null &&
+      this.audioContext.state !== "closed" &&
+      this.audioContext.state !== "suspended"
+    );
+  }
+
+  /**
+   * Verifica se o áudio está tocando atualmente
+   * @returns {boolean} true se há um áudio tocando
+   */
+  isPlaying() {
+    return this.currentSource !== null;
+  }
+
+  /**
+   * Obtém informações sobre o estado do áudio
+   * @returns {object} Informações sobre o estado do áudio
+   */
+  getAudioState() {
+    return {
+      contextReady: this.isContextReady(),
+      isPlaying: this.isPlaying(),
+      contextState: this.audioContext?.state || "none",
+      lastPlayAttempt: this.lastPlayAttempt,
+      lastPlaySuccess: this.lastPlaySuccess,
+      playAttempts: this.playAttempts,
+      // Nota: Não podemos detectar volume do sistema diretamente
+      // Mas podemos inferir problemas se muitas tentativas falharem
+      mightBeMuted: this.playAttempts > 0 && this.lastPlaySuccess === null,
+    };
+  }
+
+  /**
    * Para o áudio atual imediatamente (síncrono)
    * SEMPRE deve ser chamado antes de tocar um novo áudio
    * FORÇA a parada de qualquer coisa que esteja tocando
@@ -42,6 +85,7 @@ class AudioPlayer {
   stop() {
     const source = this.currentSource;
     const gainNode = this.currentGainNode;
+    const wasPlaying = source !== null; // Verifica se havia áudio tocando
 
     // Limpa referências PRIMEIRO para evitar race conditions
     this.currentSource = null;
@@ -70,6 +114,14 @@ class AudioPlayer {
       } catch (error) {
         // Ignora erros
       }
+    }
+
+    // Emite evento de áudio interrompido se havia um áudio tocando
+    if (wasPlaying) {
+      eventBus.emit("AUDIO_INTERRUPTED", {
+        timestamp: Date.now(),
+        reason: "stopped",
+      });
     }
   }
 
@@ -102,6 +154,8 @@ class AudioPlayer {
     // CRÍTICO: Para o áudio atual de forma SÍNCRONA e IMEDIATA
     // Isso garante que não há sobreposição
     console.log("Tocando áudio:");
+    this.lastPlayAttempt = Date.now();
+    this.playAttempts++;
     this.stop();
 
     // Armazena esta requisição como a mais recente
@@ -202,6 +256,8 @@ class AudioPlayer {
           this.currentSource = null;
           this.currentGainNode = null;
         }
+        // Marca como sucesso se o áudio terminou normalmente
+        this.lastPlaySuccess = Date.now();
         // Sempre reseta isProcessing quando o áudio terminar
         this.isProcessing = false;
 
@@ -213,6 +269,8 @@ class AudioPlayer {
 
       // Toca o áudio
       source.start(0);
+      // Marca como sucesso imediatamente após iniciar (se chegou até aqui, provavelmente está tocando)
+      this.lastPlaySuccess = Date.now();
       // isProcessing será resetado quando o áudio terminar (onended)
     } catch (error) {
       console.error("Erro ao tocar áudio:", error);
