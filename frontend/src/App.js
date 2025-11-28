@@ -15,6 +15,7 @@ import {
   gameLoop,
   achievementManager,
 } from "./core";
+import { getRouteConfig } from "./core/stanley/getRouteConfig";
 import Navigation from "./components/Navigation";
 import GameStateDebug from "./components/GameStateDebug";
 import Home from "./pages/Home";
@@ -183,9 +184,13 @@ function AppContentInner() {
         lastAction: "NAVIGATE",
       });
 
-      // Adiciona achievement cumulativo baseado na página navegada
-      if (path === "/about") {
-        achievementManager.addCumulativeAchievement("about", 4);
+      // Adiciona achievement cumulativo baseado na configuração de rotas
+      const routeConfig = getRouteConfig(path);
+      if (routeConfig && routeConfig.achievementBase) {
+        achievementManager.addCumulativeAchievement(
+          routeConfig.achievementBase,
+          routeConfig.maxAchievements || 10
+        );
       }
     };
 

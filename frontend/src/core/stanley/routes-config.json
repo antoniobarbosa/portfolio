@@ -1,0 +1,43 @@
+{
+  "routes": [
+    {
+      "path": "/about",
+      "achievementBase": "about",
+      "maxAchievements": 4,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.7
+      }
+    },
+    {
+      "path": "/contact",
+      "achievementBase": "contact",
+      "maxAchievements": 3,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.6
+      }
+    },
+    {
+      "path": "/help",
+      "achievementBase": "help",
+      "maxAchievements": 5,
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.5
+      }
+    }
+  ],
+  "achievements": [
+    {
+      "id": "game_start",
+      "audio": {
+        "file": "/audio/stanleys_parable/audio_test.wav",
+        "volume": 0.7
+      },
+      "once": true,
+      "priority": 20
+    }
+  ]
+}
+
