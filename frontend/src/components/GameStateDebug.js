@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./GameStateDebug.css";
 import { audioPlayer } from "../core";
+import { stanleyStateManager, STANLEY_STATES } from "./StanleyCharacter";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
 
@@ -10,6 +11,7 @@ function GameStateDebug({ gameState }) {
   const [isResetting, setIsResetting] = useState(false);
   const [clientIp, setClientIp] = useState(null);
   const [audioState, setAudioState] = useState(null);
+  const [stanleyState, setStanleyState] = useState(STANLEY_STATES.IDLE);
 
   // Busca o IP da sessão atual (apenas uma vez quando o componente monta)
   useEffect(() => {
@@ -60,6 +62,19 @@ function GameStateDebug({ gameState }) {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Escuta mudanças de estado do Stanley
+  useEffect(() => {
+    const unsubscribe = stanleyStateManager.subscribe((newState) => {
+      setStanleyState(newState);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Função para mudar estado do Stanley
+  const handleStanleyStateChange = (newState) => {
+    stanleyStateManager.setState(newState);
+  };
 
   if (!gameState) {
     return null;
@@ -195,15 +210,93 @@ function GameStateDebug({ gameState }) {
                 )}
                 {audioState.lastPlaySuccess && (
                   <div className="GameStateDebug-audio-item">
-                    <span className="GameStateDebug-audio-label">Last Play:</span>
+                    <span className="GameStateDebug-audio-label">
+                      Last Play:
+                    </span>
                     <span className="GameStateDebug-audio-value">
-                      {new Date(audioState.lastPlaySuccess).toLocaleTimeString()}
+                      {new Date(
+                        audioState.lastPlaySuccess
+                      ).toLocaleTimeString()}
                     </span>
                   </div>
                 )}
               </div>
             </div>
           )}
+
+          {/* Controles de Estado do Stanley */}
+          <div className="GameStateDebug-stanley">
+            <div className="GameStateDebug-stanley-header">
+              <span className="GameStateDebug-label">Stanley State:</span>
+              <span className="GameStateDebug-stanley-current">
+                {stanleyState}
+              </span>
+            </div>
+            <div className="GameStateDebug-stanley-buttons">
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() => handleStanleyStateChange(STANLEY_STATES.HIDDEN)}
+                title="Esconder"
+              >
+                👁️‍🗨️ Hidden
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() =>
+                  handleStanleyStateChange(STANLEY_STATES.APPEARING)
+                }
+                title="Aparecer"
+              >
+                ✨ Appear
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() => handleStanleyStateChange(STANLEY_STATES.IDLE)}
+                title="Idle"
+              >
+                😊 Idle
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() => handleStanleyStateChange(STANLEY_STATES.TALKING)}
+                title="Falando"
+              >
+                🗣️ Talking
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() => handleStanleyStateChange(STANLEY_STATES.EXCITED)}
+                title="Excitado"
+              >
+                🎉 Excited
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() =>
+                  handleStanleyStateChange(STANLEY_STATES.THINKING)
+                }
+                title="Pensando"
+              >
+                🤔 Thinking
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() =>
+                  handleStanleyStateChange(STANLEY_STATES.DISAPPEARING)
+                }
+                title="Desaparecer"
+              >
+                👻 Disappear
+              </button>
+              <button
+                className="GameStateDebug-stanley-btn"
+                onClick={() => handleStanleyStateChange(STANLEY_STATES.ANGRY)}
+                title="Bravo"
+              >
+                😠 Angry
+              </button>
+            </div>
+          </div>
           <pre className="GameStateDebug-json">
             {JSON.stringify(gameState, null, 2)}
           </pre>

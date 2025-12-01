@@ -261,6 +261,12 @@ class AudioPlayer {
         // Sempre reseta isProcessing quando o áudio terminar
         this.isProcessing = false;
 
+        // Emite evento de áudio terminado
+        eventBus.emit("AUDIO_ENDED", {
+          audioPath: request.audioPath,
+          timestamp: Date.now(),
+        });
+
         // Se há uma requisição pendente, processa ela
         if (this.pendingRequest) {
           this.processPlayRequest();
@@ -271,6 +277,12 @@ class AudioPlayer {
       source.start(0);
       // Marca como sucesso imediatamente após iniciar (se chegou até aqui, provavelmente está tocando)
       this.lastPlaySuccess = Date.now();
+      
+      // Emite evento de áudio iniciado
+      eventBus.emit("AUDIO_START", {
+        audioPath: request.audioPath,
+        timestamp: Date.now(),
+      });
       // isProcessing será resetado quando o áudio terminar (onended)
     } catch (error) {
       console.error("Erro ao tocar áudio:", error);

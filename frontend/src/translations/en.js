@@ -6,6 +6,7 @@ export const en = {
     help: "Help",
     events: "Events",
     gamestates: "GameStates",
+    labs: "Labs",
   },
   home: {
     title: "Welcome to my Portfolio",
@@ -47,6 +48,28 @@ export const en = {
     faq1Answer: 'Navigate to the "About" section to learn more about my work.',
     faq2Question: "How to get in touch?",
     faq2Answer: 'Visit the "Contact" page to find my contact information.',
+  },
+  labs: {
+    title: "Labs",
+    subtitle: "Experimental projects and experiments",
+    welcome: "Welcome to the Labs",
+    description: "This is where I experiment with new ideas, test technologies, and create experimental projects.",
+    experiments: "Experiments",
+    experimentsDescription: "Here you'll find various experimental projects and prototypes that I'm working on.",
+    comingSoon: "Coming Soon",
+    comingSoonText: "More experiments and projects will be added here soon. Stay tuned!",
+    app1: {
+      title: "Portal Game",
+      description: "A canvas-based Portal game where you can create portals and teleport through them. Use WASD to move, left click for blue portal, right click for orange portal.",
+    },
+    app2: {
+      title: "Application 2",
+      description: "Description of the second experimental application.",
+    },
+    app3: {
+      title: "Application 3",
+      description: "Description of the third experimental application.",
+    },
   },
   common: {
     loading: "Loading...",

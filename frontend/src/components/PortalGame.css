@@ -1,0 +1,188 @@
+.PortalGame-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.PortalGame-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 700px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.PortalGame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #fff;
+  width: 100%;
+}
+
+.PortalGame-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #4a90e2;
+}
+
+.PortalGame-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.PortalGame-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
+}
+
+.PortalGame-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #fff;
+  width: 100%;
+}
+
+.PortalGame-score {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.PortalGame-instructions {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.PortalGame-instructions p {
+  margin: 0.3rem 0;
+}
+
+.PortalGame-instructions strong {
+  color: #4a90e2;
+}
+
+.PortalGame-canvas {
+  border: 3px solid #4a90e2;
+  border-radius: 8px;
+  background: #0f0f1e;
+  cursor: none;
+  display: block;
+  width: 600px;
+  height: 400px;
+  margin: 0 auto;
+  outline: none;
+}
+
+.PortalGame-hint {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(74, 144, 226, 0.2);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  text-align: center;
+  color: #4a90e2;
+  width: 100%;
+  animation: pulse 1.5s ease infinite;
+}
+
+.PortalGame-victory {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  text-align: center;
+  color: #ffd700;
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.PortalGame-victory h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .PortalGame-container {
+    padding: 1rem;
+    max-width: 95%;
+  }
+
+  .PortalGame-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .PortalGame-canvas {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 3/2;
+  }
+
+  .PortalGame-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .PortalGame-instructions {
+    font-size: 0.8rem;
+  }
+}
+

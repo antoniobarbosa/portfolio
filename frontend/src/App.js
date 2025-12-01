@@ -18,12 +18,14 @@ import {
 import { getRouteConfig } from "./core/stanley/getRouteConfig";
 import Navigation from "./components/Navigation";
 import GameStateDebug from "./components/GameStateDebug";
+import StanleyCharacter from "./components/StanleyCharacter";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import Events from "./pages/Events";
 import GameStates from "./pages/GameStates";
+import Labs from "./pages/Labs";
 import "./App.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
@@ -392,6 +394,7 @@ function AppContentInner() {
               <Route path="/help" element={<Help />} />
               <Route path="/events" element={<Events />} />
               <Route path="/gamestates" element={<GameStates />} />
+              <Route path="/labs" element={<Labs />} />
             </Routes>
           </main>
           <footer className="App-footer">
@@ -399,6 +402,8 @@ function AppContentInner() {
           </footer>
         </>
       )}
+      {/* Stanley Character - Narrador visual */}
+      {gameState && <StanleyCharacter />}
       {/* Debug sempre visível quando houver gameState */}
       {gameState && <GameStateDebug gameState={gameState} />}
     </div>

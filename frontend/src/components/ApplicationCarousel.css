@@ -1,0 +1,187 @@
+.ApplicationCarousel {
+  width: 100%;
+  margin: 3rem 0;
+}
+
+.ApplicationCarousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ApplicationCarousel-button {
+  background: #333;
+  color: #fff;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.ApplicationCarousel-button:hover {
+  background: #555;
+  transform: scale(1.1);
+}
+
+.ApplicationCarousel-button:active {
+  transform: scale(0.95);
+}
+
+.ApplicationCarousel-slide {
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
+}
+
+.ApplicationCarousel-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.ApplicationCarousel-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+}
+
+.ApplicationCarousel-image {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ApplicationCarousel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ApplicationCarousel-content {
+  padding: 2rem;
+}
+
+.ApplicationCarousel-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.ApplicationCarousel-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.ApplicationCarousel-technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ApplicationCarousel-tech {
+  background: #e8e8e8;
+  color: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ApplicationCarousel-link {
+  display: inline-block;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.ApplicationCarousel-link:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+.ApplicationCarousel-button-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ApplicationCarousel-button-link:hover {
+  text-decoration: underline;
+}
+
+.ApplicationCarousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.ApplicationCarousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.ApplicationCarousel-dot:hover {
+  background: #999;
+  transform: scale(1.2);
+}
+
+.ApplicationCarousel-dot--active {
+  background: #333;
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 768px) {
+  .ApplicationCarousel-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .ApplicationCarousel-image {
+    height: 200px;
+  }
+
+  .ApplicationCarousel-content {
+    padding: 1.5rem;
+  }
+
+  .ApplicationCarousel-title {
+    font-size: 1.5rem;
+  }
+
+  .ApplicationCarousel-description {
+    font-size: 1rem;
+  }
+}
+

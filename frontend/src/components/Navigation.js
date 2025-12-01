@@ -93,6 +93,14 @@ function Navigation() {
           >
             {t.nav.gamestates}
           </Link>
+          <Link 
+            to="/labs" 
+            id="nav-labs"
+            className={`Navigation-link ${isActive('/labs')}`}
+            onClick={(e) => handleNavigation(e, '/labs', 'labs')}
+          >
+            {t.nav.labs}
+          </Link>
         </div>
         <button 
           id="language-toggle"
