@@ -1,0 +1,150 @@
+.ClickerGame-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ClickerGame-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ClickerGame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: #fff;
+  width: 100%;
+}
+
+.ClickerGame-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #4a90e2;
+}
+
+.ClickerGame-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.ClickerGame-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
+}
+
+.ClickerGame-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+.ClickerGame-counter {
+  background: rgba(74, 144, 226, 0.2);
+  border: 3px solid #4a90e2;
+  border-radius: 12px;
+  padding: 2rem;
+  min-width: 200px;
+  text-align: center;
+}
+
+.ClickerGame-count {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #4a90e2;
+  display: block;
+}
+
+.ClickerGame-button {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  min-width: 200px;
+}
+
+.ClickerGame-button:hover {
+  background: #5ba0f2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.ClickerGame-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(74, 144, 226, 0.3);
+}
+
+@media (max-width: 768px) {
+  .ClickerGame-container {
+    padding: 1.5rem;
+  }
+
+  .ClickerGame-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .ClickerGame-count {
+    font-size: 3rem;
+  }
+
+  .ClickerGame-button {
+    padding: 1.2rem 2rem;
+    font-size: 1.2rem;
+  }
+}

@@ -1,10 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ApplicationCarousel.css";
 import PortalGame from "./PortalGame";
+import CountdownTimer from "./CountdownTimer";
+import { useLanguage } from "../contexts/LanguageContext";
+import { getTranslation } from "../translations";
+
+const CLICKER_STORAGE_KEY = "portfolio_clicker_count";
 
 function ApplicationCarousel({ applications }) {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPortalGame, setShowPortalGame] = useState(false);
+
+  // Carrega o contador do localStorage ao montar
+  const [clickerCount, setClickerCount] = useState(() => {
+    const saved = localStorage.getItem(CLICKER_STORAGE_KEY);
+    return saved ? parseInt(saved, 10) : 0;
+  });
+
+  // Salva o contador no localStorage sempre que mudar
+  useEffect(() => {
+    localStorage.setItem(CLICKER_STORAGE_KEY, clickerCount.toString());
+  }, [clickerCount]);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -73,6 +91,22 @@ function ApplicationCarousel({ applications }) {
                   >
                     Play Portal →
                   </button>
+                ) : currentIndex === 1 ? (
+                  <div className="ApplicationCarousel-clicker">
+                    <div className="ApplicationCarousel-clicker-counter">
+                      <span className="ApplicationCarousel-clicker-count">
+                        {clickerCount}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setClickerCount((prev) => prev + 1)}
+                      className="ApplicationCarousel-clicker-button"
+                    >
+                      {t.labs.app2?.clickHere || "Click Here"}
+                    </button>
+                  </div>
+                ) : currentIndex === 2 ? (
+                  <CountdownTimer />
                 ) : currentApp.link ? (
                   <a
                     href={currentApp.link}

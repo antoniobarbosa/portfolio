@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.CountdownTimer-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  position: relative;
+}
+
+.CountdownTimer-start-button {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.CountdownTimer-start-button:hover {
+  background: #5ba0f2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.CountdownTimer-start-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(74, 144, 226, 0.3);
+}
+
+.metroid-alert {
+  font-family: "Press Start 2P", monospace;
+  text-align: center;
+  color: #006633;
+  padding: 20px;
+  background: transparent;
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid #004422;
+  box-shadow: 0 0 20px #002211;
+  transition: all 0.5s ease;
+  position: fixed;
+  z-index: 1000;
+}
+
+.metroid-alert--center .timer-label,
+.metroid-alert--center .timer-value {
+  text-align: left;
+}
+
+.metroid-alert--corner {
+  text-align: left;
+}
+
+.metroid-alert--center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  max-width: 400px;
+}
+
+.metroid-alert--corner {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  max-width: 300px;
+  padding: 15px;
+  z-index: 1000;
+  animation: slideToCorner 0.5s ease;
+  transform: scale(0.8);
+}
+
+@keyframes slideToCorner {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.8);
+  }
+}
+
+.alert-title {
+  color: #cc3300;
+  font-size: 16px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 6px #990000;
+}
+
+.alert-line {
+  font-size: 14px;
+  margin: 4px 0;
+  letter-spacing: 2px;
+  color: #006633;
+  text-shadow: 0 0 4px #004422;
+}
+
+.timer-label {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #cc6600;
+  letter-spacing: 3px;
+  text-shadow: 0 0 5px #994400;
+  text-align: left;
+}
+
+.timer-value {
+  font-size: 28px;
+  margin-top: 6px;
+  color: #996600;
+  text-shadow: 0 0 6px #664400;
+  letter-spacing: 3px;
+  text-align: left;
+}
+
+.metroid-alert--corner .alert-title {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.metroid-alert--corner .alert-line {
+  font-size: 10px;
+  margin: 2px 0;
+}
+
+.metroid-alert--corner .timer-label {
+  font-size: 10px;
+  margin-top: 0;
+  text-align: left;
+}
+
+.metroid-alert--corner .timer-value {
+  font-size: 20px;
+  margin-top: 4px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .metroid-alert {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .metroid-alert--corner {
+    max-width: 200px;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+  }
+
+  .alert-title {
+    font-size: 12px;
+  }
+
+  .alert-line {
+    font-size: 10px;
+  }
+
+  .timer-value {
+    font-size: 20px;
+  }
+}

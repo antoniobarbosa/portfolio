@@ -3,6 +3,12 @@ import "./PortalGame.css";
 
 function PortalGame({ onClose }) {
   const canvasRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+
+  // Atualiza a referência do onClose sempre que mudar
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -143,19 +149,28 @@ function PortalGame({ onClose }) {
       state.pointerLocked = isLocked;
       canvas.style.cursor = isLocked ? "none" : "crosshair";
 
-      // Se o pointer lock foi perdido, tenta reativar automaticamente
+      // Quando pointer lock é ativado, garante que o canvas tenha foco
+      if (isLocked && !wasLocked) {
+        canvas.focus();
+      }
+
+      // Se o pointer lock foi perdido (ESC pressionado), fecha o jogo
       if (wasLocked && !isLocked) {
-        setTimeout(() => {
-          requestPointerLock();
-        }, 100);
+        if (onCloseRef.current) {
+          onCloseRef.current();
+        }
       }
     };
 
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        // Usa uma referência estável para onClose
-        if (onClose) {
-          onClose();
+      console.log("Keydown event:", e.key, e.keyCode, e.target);
+      if (e.key === "Escape" || e.keyCode === 27) {
+        console.log("Fechando portal game");
+        e.preventDefault();
+        e.stopPropagation();
+        // Fecha o modal chamando onClose
+        if (onCloseRef.current) {
+          onCloseRef.current();
         }
       }
     };
@@ -163,13 +178,15 @@ function PortalGame({ onClose }) {
     // Event listeners
     canvas.addEventListener("mousemove", handlePointerLockMove);
     canvas.addEventListener("click", handleCanvasClick);
+    canvas.addEventListener("keydown", handleKeyDown); // ESC no canvas
+    canvas.setAttribute("tabindex", "0"); // Permite que o canvas receba eventos de teclado
     document.addEventListener("pointerlockchange", handlePointerLockChange);
     document.addEventListener("mozpointerlockchange", handlePointerLockChange);
     document.addEventListener(
       "webkitpointerlockchange",
       handlePointerLockChange
     );
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown); // ESC no document também
 
     // Renderização
     function render() {
@@ -273,12 +290,15 @@ function PortalGame({ onClose }) {
     // Ativa pointer lock automaticamente ao montar
     setTimeout(() => {
       requestPointerLock();
+      // Garante que o canvas tenha foco para receber eventos de teclado
+      canvas.focus();
     }, 100);
 
     // Cleanup
     return () => {
       canvas.removeEventListener("mousemove", handlePointerLockMove);
       canvas.removeEventListener("click", handleCanvasClick);
+      canvas.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener(
         "pointerlockchange",
         handlePointerLockChange
