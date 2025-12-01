@@ -19,6 +19,8 @@ import { getRouteConfig } from "./core/stanley/getRouteConfig";
 import Navigation from "./components/Navigation";
 import GameStateDebug from "./components/GameStateDebug";
 import StanleyCharacter from "./components/StanleyCharacter";
+import ExplosionEffects from "./components/ExplosionEffects";
+import CountdownGlobalEffects from "./components/CountdownGlobalEffects";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -406,6 +408,10 @@ function AppContentInner() {
       {gameState && <StanleyCharacter />}
       {/* Debug sempre visível quando houver gameState */}
       {gameState && <GameStateDebug gameState={gameState} />}
+      {/* Explosões globais - funcionam em todas as páginas */}
+      <ExplosionEffects />
+      {/* Countdown global - shake, overlay vermelho e timer em todas as páginas */}
+      <CountdownGlobalEffects />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { activateCountdown } from "./CountdownGlobalEffects";
 import "./CountdownTimer.css";
 
 function CountdownTimer() {
@@ -9,6 +10,8 @@ function CountdownTimer() {
   const [showInCorner, setShowInCorner] = useState(false);
   const intervalRef = useRef(null);
   const msIntervalRef = useRef(null);
+
+  // Remove shake e overlay local - agora é gerenciado globalmente
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -62,6 +65,8 @@ function CountdownTimer() {
     setMilliseconds(0);
     setIsRunning(true);
     setShowInCorner(false);
+    // Ativa countdown globalmente (explosões são ativadas automaticamente)
+    activateCountdown(60, 0, false);
   };
 
   const formatTime = (seconds, ms) => {
@@ -103,8 +108,11 @@ function CountdownTimer() {
           </button>
         )}
       </div>
-      {/* Renderiza o alerta globalmente usando Portal */}
-      {alertContent && createPortal(alertContent, document.body)}
+      {/* Renderiza o alerta localmente apenas quando está rodando e não está no canto */}
+      {isRunning &&
+        !showInCorner &&
+        alertContent &&
+        createPortal(alertContent, document.body)}
     </>
   );
 }
