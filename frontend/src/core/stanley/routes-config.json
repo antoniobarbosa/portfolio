@@ -26,15 +26,6 @@
         "file": "/audio/stanleys_parable/audio_test.wav",
         "volume": 0.5
       }
-    },
-    {
-      "path": "/labs",
-      "achievementBase": "labs",
-      "maxAchievements": 3,
-      "audio": {
-        "file": "/audio/stanleys_parable/audio_test.wav",
-        "volume": 0.6
-      }
     }
   ],
   "achievements": [

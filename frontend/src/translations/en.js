@@ -75,6 +75,14 @@ export const en = {
       title: "Application 3",
       description: "Description of the third experimental application.",
     },
+    app4: {
+      title: "Store",
+      description: "Buy upgrades and power-ups with your clicks.",
+    },
+    app5: {
+      title: "The Witness",
+      description: "A mysterious application that observes and records.",
+    },
   },
   common: {
     loading: "Loading...",

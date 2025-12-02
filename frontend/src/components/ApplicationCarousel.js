@@ -2,16 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./ApplicationCarousel.css";
 import PortalGame from "./PortalGame";
 import CountdownTimer from "./CountdownTimer";
+import Store from "./Store";
+import WitnessGame from "./WitnessGame";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getTranslation } from "../translations";
 
 const CLICKER_STORAGE_KEY = "portfolio_clicker_count";
+const CLICK_MULTIPLIER_KEY = "portfolio_click_multiplier";
 
 function ApplicationCarousel({ applications }) {
   const { language } = useLanguage();
   const t = getTranslation(language);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPortalGame, setShowPortalGame] = useState(false);
+  const [showWitnessGame, setShowWitnessGame] = useState(false);
 
   // Carrega o contador do localStorage ao montar
   const [clickerCount, setClickerCount] = useState(() => {
@@ -19,10 +23,42 @@ function ApplicationCarousel({ applications }) {
     return saved ? parseInt(saved, 10) : 0;
   });
 
+  // Carrega o multiplicador do localStorage
+  const [clickMultiplier, setClickMultiplier] = useState(() => {
+    const saved = localStorage.getItem(CLICK_MULTIPLIER_KEY);
+    return saved ? parseInt(saved, 10) : 1;
+  });
+
   // Salva o contador no localStorage sempre que mudar
   useEffect(() => {
     localStorage.setItem(CLICKER_STORAGE_KEY, clickerCount.toString());
   }, [clickerCount]);
+
+  // Escuta mudanças no multiplicador (vindas da store)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === CLICK_MULTIPLIER_KEY) {
+        const saved = localStorage.getItem(CLICK_MULTIPLIER_KEY);
+        setClickMultiplier(saved ? parseInt(saved, 10) : 1);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Verifica periodicamente também (para mesma aba)
+    const checkInterval = setInterval(() => {
+      const saved = localStorage.getItem(CLICK_MULTIPLIER_KEY);
+      const multiplier = saved ? parseInt(saved, 10) : 1;
+      if (multiplier !== clickMultiplier) {
+        setClickMultiplier(multiplier);
+      }
+    }, 500);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(checkInterval);
+    };
+  }, [clickMultiplier]);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -50,6 +86,9 @@ function ApplicationCarousel({ applications }) {
     <>
       {showPortalGame && (
         <PortalGame onClose={() => setShowPortalGame(false)} />
+      )}
+      {showWitnessGame && (
+        <WitnessGame onClose={() => setShowWitnessGame(false)} />
       )}
       <div className="ApplicationCarousel">
         <div className="ApplicationCarousel-container">
@@ -99,14 +138,34 @@ function ApplicationCarousel({ applications }) {
                       </span>
                     </div>
                     <button
-                      onClick={() => setClickerCount((prev) => prev + 1)}
+                      onClick={() =>
+                        setClickerCount((prev) => prev + clickMultiplier)
+                      }
                       className="ApplicationCarousel-clicker-button"
                     >
                       {t.labs.app2?.clickHere || "Click Here"}
                     </button>
+                    {clickMultiplier > 1 && (
+                      <p className="ApplicationCarousel-clicker-multiplier">
+                        +{clickMultiplier} per click
+                      </p>
+                    )}
                   </div>
                 ) : currentIndex === 2 ? (
                   <CountdownTimer />
+                ) : currentIndex === 3 ? (
+                  <Store
+                    clickerCount={clickerCount}
+                    setClickerCount={setClickerCount}
+                    setClickMultiplier={setClickMultiplier}
+                  />
+                ) : currentApp.id === "witness" ? (
+                  <button
+                    onClick={() => setShowWitnessGame(true)}
+                    className="ApplicationCarousel-link ApplicationCarousel-button-link"
+                  >
+                    Play The Witness →
+                  </button>
                 ) : currentApp.link ? (
                   <a
                     href={currentApp.link}

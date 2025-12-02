@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { activateExplosions } from "./ExplosionEffects";
+import { useNavigate } from "react-router-dom";
+import { activateExplosions, deactivateExplosions } from "./ExplosionEffects";
 import "./CountdownTimer.css";
 
 const COUNTDOWN_STORAGE_KEY = "portfolio_countdown_active";
@@ -33,6 +34,12 @@ export const updateCountdownTime = (timeLeft, milliseconds) => {
   if (isCountdownActive()) {
     localStorage.setItem(COUNTDOWN_TIME_KEY, timeLeft.toString());
     localStorage.setItem(COUNTDOWN_MS_KEY, milliseconds.toString());
+    // Só ativa explosões se tempo < 60 segundos
+    if (timeLeft < 60) {
+      activateExplosions();
+    } else {
+      deactivateExplosions();
+    }
   }
 };
 
@@ -49,10 +56,13 @@ export const deactivateCountdown = () => {
   localStorage.removeItem(COUNTDOWN_TIME_KEY);
   localStorage.removeItem(COUNTDOWN_MS_KEY);
   localStorage.removeItem(COUNTDOWN_SHOW_CORNER_KEY);
+  // Desativa explosões quando o countdown é desativado
+  deactivateExplosions();
   window.dispatchEvent(new CustomEvent("countdown-deactivated"));
 };
 
 function CountdownGlobalEffects() {
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [milliseconds, setMilliseconds] = useState(0);
@@ -69,10 +79,17 @@ function CountdownGlobalEffects() {
         const savedMs = localStorage.getItem(COUNTDOWN_MS_KEY);
         const savedShowCorner = localStorage.getItem(COUNTDOWN_SHOW_CORNER_KEY);
 
+        const currentTime = savedTime ? parseInt(savedTime, 10) : 60;
         setIsActive(true);
-        setTimeLeft(savedTime ? parseInt(savedTime, 10) : 60);
+        setTimeLeft(currentTime);
         setMilliseconds(savedMs ? parseInt(savedMs, 10) : 0);
         setShowInCorner(savedShowCorner === "true");
+        // Só ativa explosões se tempo < 60 segundos
+        if (currentTime < 60) {
+          activateExplosions();
+        } else {
+          deactivateExplosions();
+        }
       } else {
         setIsActive(false);
       }
@@ -81,10 +98,32 @@ function CountdownGlobalEffects() {
     // Verifica estado inicial
     checkAndUpdateState();
 
-    // Se o countdown já estiver ativo, ativa as explosões também
+    // Se o countdown já estiver ativo, verifica se deve ativar explosões (só se tempo < 60)
     if (isCountdownActive()) {
-      activateExplosions();
+      const savedTime = localStorage.getItem(COUNTDOWN_TIME_KEY);
+      const currentTime = savedTime ? parseInt(savedTime, 10) : 60;
+      if (currentTime < 60) {
+        activateExplosions();
+      } else {
+        deactivateExplosions();
+      }
     }
+    
+    // Monitora mudanças no tempo para ativar/desativar explosões baseado no tempo
+    const checkExplosionsByTime = () => {
+      if (isCountdownActive()) {
+        const savedTime = localStorage.getItem(COUNTDOWN_TIME_KEY);
+        const currentTime = savedTime ? parseInt(savedTime, 10) : 60;
+        if (currentTime < 60) {
+          activateExplosions();
+        } else {
+          deactivateExplosions();
+        }
+      }
+    };
+    
+    // Verifica periodicamente se as explosões devem estar ativas (baseado no tempo)
+    const explosionCheckInterval = setInterval(checkExplosionsByTime, 1000);
 
     // Verifica periodicamente
     const checkInterval = setInterval(checkAndUpdateState, 500);
@@ -95,6 +134,8 @@ function CountdownGlobalEffects() {
 
     const handleDeactivate = () => {
       setIsActive(false);
+      // Garante que explosões sejam desativadas quando countdown é desativado
+      deactivateExplosions();
     };
 
     const handleStorageChange = (e) => {
@@ -114,24 +155,31 @@ function CountdownGlobalEffects() {
 
     return () => {
       clearInterval(checkInterval);
+      clearInterval(explosionCheckInterval);
       window.removeEventListener("countdown-activated", handleActivate);
       window.removeEventListener("countdown-deactivated", handleDeactivate);
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
-  // Aplica shake e overlay quando ativo
+  // Aplica shake e overlay quando ativo E tempo menor que 1 minuto
   useEffect(() => {
-    if (isActive) {
+    if (isActive && timeLeft < 60) {
       document.body.classList.add("countdown-shake");
+      // Garante que explosões estejam ativas apenas quando tempo < 60 segundos
+      activateExplosions();
     } else {
       document.body.classList.remove("countdown-shake");
+      // Desativa explosões quando tempo >= 60 segundos
+      if (isActive && timeLeft >= 60) {
+        deactivateExplosions();
+      }
     }
 
     return () => {
       document.body.classList.remove("countdown-shake");
     };
-  }, [isActive]);
+  }, [isActive, timeLeft]);
 
   // Atualiza o timer continuamente - sempre que estiver ativo
   useEffect(() => {
@@ -157,8 +205,18 @@ function CountdownGlobalEffects() {
         const newTime = currentTime <= 1 ? 0 : currentTime - 1;
         localStorage.setItem(COUNTDOWN_TIME_KEY, newTime.toString());
         setTimeLeft(newTime);
+        
+        // Quando chegar a 0, desativa countdown e explosões, depois navega para Home
         if (newTime === 0) {
+          // Desativa countdown e explosões
           deactivateCountdown();
+          setTimeLeft(60);
+          setMilliseconds(0);
+          setShowInCorner(false);
+          setIsActive(false);
+          
+          // Navega para Home
+          navigate("/");
         }
       }, 1000);
     }
@@ -211,6 +269,17 @@ function CountdownGlobalEffects() {
       const savedTime = localStorage.getItem(COUNTDOWN_TIME_KEY);
       const savedMs = localStorage.getItem(COUNTDOWN_MS_KEY);
       const savedShowCorner = localStorage.getItem(COUNTDOWN_SHOW_CORNER_KEY);
+
+      // Verifica se explosões devem estar ativas baseado no tempo
+      if (isCountdownActive()) {
+        const savedTime = localStorage.getItem(COUNTDOWN_TIME_KEY);
+        const currentTime = savedTime ? parseInt(savedTime, 10) : 60;
+        if (currentTime < 60) {
+          activateExplosions();
+        } else {
+          deactivateExplosions();
+        }
+      }
 
       if (savedTime) {
         const time = parseInt(savedTime, 10);

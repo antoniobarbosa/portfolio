@@ -77,6 +77,14 @@ export const fr = {
       title: "Application 3",
       description: "Description de la troisième application expérimentale.",
     },
+    app4: {
+      title: "Boutique",
+      description: "Achetez des améliorations et des power-ups avec vos clics.",
+    },
+    app5: {
+      title: "Le Témoin",
+      description: "Une application mystérieuse qui observe et enregistre.",
+    },
   },
   common: {
     loading: "Chargement...",
